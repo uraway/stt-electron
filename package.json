@@ -22,7 +22,6 @@
     "flow": "flow",
     "flow-typed": "rm -rf flow-typed && flow-typed install --overwrite || true",
     "start-hot-renderer": "cross-env HOT=1 NODE_ENV=development electron -r babel-register -r babel-polyfill ./app/main.development",
-    "postinstall": "concurrently \"npm run flow-typed\" \"npm run build-dll\" \"install-app-deps\" \"node node_modules/fbjs-scripts/node/check-dev-engines.js package.json\"",
     "dev": "cross-env START_HOT=1 npm run hot-updates-server",
     "package": "npm run build && build --publish never",
     "package-win": "npm run build && build --win --x64",
@@ -185,6 +184,7 @@
   },
   "dependencies": {
     "electron-debug": "^1.1.0",
+    "electron-dl": "^1.9.0",
     "extract-text-webpack-plugin": "^2.1.0",
     "font-awesome": "^4.7.0",
     "history": "^4.6.1",
@@ -198,7 +198,8 @@
     "react-router-redux": "^5.0.0-alpha.6",
     "redux": "^3.6.0",
     "redux-thunk": "^2.2.0",
-    "source-map-support": "^0.4.14"
+    "source-map-support": "^0.4.14",
+    "watson-developer-cloud": "^2.30.0"
   },
   "devEngines": {
     "node": ">=6.x",
