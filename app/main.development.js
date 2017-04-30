@@ -2,8 +2,9 @@
 // @flow
 import { app, BrowserWindow, ipcMain } from 'electron';
 import { download } from 'electron-dl';
-import SpeechToTextV1 from 'watson-developer-cloud/speech-to-text/v1';
 import fs from 'fs';
+import SpeechToTextV1 from 'watson-developer-cloud/speech-to-text/v1';
+
 
 import MenuBuilder from './menu';
 
@@ -75,50 +76,27 @@ app.on('ready', async () => {
   menuBuilder.buildMenu();
 });
 
-ipcMain.on('speech-to-text', (e, path) => {
+ipcMain.on('speech-to-text', (event, path) => {
   const speechToText = new SpeechToTextV1({
     username: 'f19ce38c-7c76-4a31-a215-62f2873c77d6',
     password: 'pETNBPoPIofK'
   });
 
   const params = {
+    audio: fs.createReadStream(path),
     model: 'ja-JP_BroadbandModel',
-    content_type: 'wav',
-    continuous: true,
-    interim_results: true,
-    max_alternatives: 3,
-    word_confidence: false,
-    timestamps: false,
-    keywords: ['colorado', 'tornado', 'tornadoes'],
-    keywords_threshold: 0.5
+    content_type: 'audio/wav',
   };
 
-  // Create the stream.
-  const recognizeStream = speechToText.createRecognizeStream(params);
-
-  // Pipe in the audio.
-  fs.createReadStream(path).pipe(recognizeStream);
-
-  const tempFilePath = `${__dirname}/tmp/transcription.txt`;
-  // Pipe out the transcription to a file.
-  recognizeStream.pipe(fs.createWriteStream(tempFilePath));
-  // Get strings instead of buffers from 'data' events.
-  recognizeStream.setEncoding('utf8');
-
-  // Displays events on the console.
-  function onEvent(name, event) {
-    if (name === 'Close:') {
-      download(BrowserWindow.getFocusedWindow(), tempFilePath, { saveAs: true });
+  speechToText.recognize(params, (err, res) => {
+    if (err) {
+      console.log(JSON.stringify(err, null, 2));
+    } else {
+      console.log('finished!!');
+      const file = encodeURI(`data:text/plain;charset=utf-8,${JSON.stringify(res, null, 2)}`);
+      download(BrowserWindow.getFocusedWindow(), file, { saveAs: true });
     }
-    console.log(name, JSON.stringify(event, null, 2));
-  }
-
-  // Listen for events.
-  recognizeStream.on('results', (event) => { onEvent('Results:', event); });
-  recognizeStream.on('data', (event) => { onEvent('Data:', event); });
-  recognizeStream.on('error', (event) => { onEvent('Error:', event); });
-  recognizeStream.on('close', (event) => { onEvent('Close:', event); });
-  recognizeStream.on('speaker_labels', (event) => { onEvent('Speaker_Labels:', event); });
+  });
 });
 
 ipcMain.on('download-file', (event, file) => {
