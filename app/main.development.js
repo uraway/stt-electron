@@ -76,7 +76,7 @@ app.on('ready', async () => {
   menuBuilder.buildMenu();
 });
 
-ipcMain.on('speech-to-text', (event, path) => {
+ipcMain.on('speech-to-text-request', (event, path) => {
   const speechToText = new SpeechToTextV1({
     username: 'f19ce38c-7c76-4a31-a215-62f2873c77d6',
     password: 'pETNBPoPIofK'
@@ -90,11 +90,10 @@ ipcMain.on('speech-to-text', (event, path) => {
 
   speechToText.recognize(params, (err, res) => {
     if (err) {
-      ipcMain.send('speech-to-text-failure', err);
+      event.sender.send('speech-to-text-failure', err);
     } else {
-      ipcMain.send('speech-to-text-success');
-      const file = encodeURI(`data:text/plain;charset=utf-8,${JSON.stringify(res, null, 2)}`);
-      download(BrowserWindow.getFocusedWindow(), file, { saveAs: true });
+      event.sender.send('speech-to-text-success', res);
+      // const file = encodeURI(`data:text/plain;charset=utf-8,${JSON.stringify(res, null, 2)}`);
     }
   });
 });

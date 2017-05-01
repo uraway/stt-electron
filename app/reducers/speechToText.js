@@ -7,6 +7,10 @@ const initialState = {
   isRequesting: false
 };
 
+export type speechToTextStateType = {
+  speechToText: Object
+};
+
 type actionType = {
   type: string,
   errors?: Object
