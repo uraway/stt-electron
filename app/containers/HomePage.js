@@ -5,12 +5,15 @@ import * as SpeechToTextActions from '../actions/speechToText';
 
 function mapStateToProps(state) {
   return {
-    speechToText: state.speechToText
+    speechToText: state.speechToText,
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(SpeechToTextActions, dispatch);
+  return {
+    dispatch,
+    speechToTextActions: bindActionCreators(SpeechToTextActions, dispatch)
+  };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

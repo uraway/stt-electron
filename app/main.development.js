@@ -90,8 +90,10 @@ ipcMain.on('speech-to-text-request', (event, path) => {
 
   speechToText.recognize(params, (err, res) => {
     if (err) {
+      console.log('error');
       event.sender.send('speech-to-text-failure', err);
     } else {
+      console.log('finished');
       event.sender.send('speech-to-text-success', res);
       // const file = encodeURI(`data:text/plain;charset=utf-8,${JSON.stringify(res, null, 2)}`);
     }

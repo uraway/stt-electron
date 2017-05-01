@@ -12,17 +12,3 @@ export function sendSpeechToText(path) {
     ipcRenderer.send('speech-to-text-request', path);
   };
 }
-
-ipcRenderer.on('speech-to-text-success', (_e, res) => (dispatch) => {
-  dispatch({
-    type: SPEECH_TO_TEXT_SUCCESS,
-    res
-  });
-});
-
-ipcRenderer.on('speech-to-text-failure', (_e, err) => (dispatch) => {
-  dispatch({
-    type: SPEECH_TO_TEXT_FAILURE,
-    err
-  });
-});

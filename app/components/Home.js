@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { ipcRenderer } from 'electron';
 import RaisedButton from 'material-ui/RaisedButton';
+import TextField from 'material-ui/TextField';
+
+import * as types from '../actions/speechToText';
 
 const styles = {
   button: {
@@ -22,11 +26,48 @@ export default class Home extends Component {
 
   static propTypes = {
     speechToText: PropTypes.object.isRequired,
-    sendSpeechToText: PropTypes.func.isRequired
+    speechToTextActions: PropTypes.shape({
+      sendSpeechToText: PropTypes.func.isRequired,
+    }).isRequired,
+    dispatch: PropTypes.func.isRequired
+  }
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      errorText: '',
+      transaction: ''
+    };
+
+    const { dispatch } = props;
+
+    ipcRenderer.on('speech-to-text-success', (_e, res) => {
+      dispatch({
+        type: types.SPEECH_TO_TEXT_SUCCESS,
+        res
+      });
+    });
+
+    ipcRenderer.on('speech-to-text-failure', (_e, err) => {
+      dispatch({
+        type: types.SPEECH_TO_TEXT_FAILURE,
+        err
+      });
+    });
+  }
+
+
+  componentWillReceiveProps(newProps) {
+    const { speechToText } = newProps;
+    if (speechToText.type === types.SPEECH_TO_TEXT_SUCCESS) {
+      this.setState({
+        transaction: ''
+      });
+    }
   }
 
   handleAudioFileUpload = (e) => {
-    const { sendSpeechToText } = this.props;
+    const { sendSpeechToText } = this.props.speechToTextActions;
     const file = e.target.files[0];
     const path = file.path;
 
@@ -34,7 +75,7 @@ export default class Home extends Component {
       sendSpeechToText(path);
       e.target.value = null;
     } else {
-      console.error('Upload Failed');
+      this.setState({ errorText: 'Upload Failed' });
       return false;
     }
 
@@ -43,10 +84,11 @@ export default class Home extends Component {
 
   render() {
     const { speechToText } = this.props;
+    const { transaction } = this.state;
     return (
       <div>
         <RaisedButton
-          label={speechToText.isRequesting ? 'Uploading Audio File...' : 'Choose Audio File'}
+          label={speechToText.isRequesting ? 'Uploading...' : 'Choose Audio File'}
           labelPosition="before"
           containerElement="label"
           style={styles.button}
@@ -59,6 +101,10 @@ export default class Home extends Component {
             disabled={speechToText.isRequesting}
           />
         </RaisedButton>
+        <TextField
+          name="transaction"
+          value={transaction}
+        />
       </div>
     );
   }

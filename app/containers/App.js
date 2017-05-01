@@ -1,6 +1,6 @@
 // @flow
 import React, { Component } from 'react';
-import type { Children } from 'react';
+import { PropTypes } from 'prop-types';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
@@ -9,8 +9,8 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 
 export default class App extends Component {
-  props: {
-    children: Children
+  static propTypes = {
+    children: PropTypes.node.isRequired,
   };
 
   render() {
