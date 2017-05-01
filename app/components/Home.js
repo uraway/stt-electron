@@ -56,6 +56,7 @@ export default class Home extends Component {
             style={styles.input}
             onChange={this.handleAudioFileUpload}
             type="file"
+            disabled={speechToText.isRequesting}
           />
         </RaisedButton>
       </div>
