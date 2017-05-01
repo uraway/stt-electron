@@ -1,11 +1,16 @@
-// @flow
-import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import Home from '../components/Home';
+import * as SpeechToTextActions from '../actions/speechToText';
 
-export default class HomePage extends Component {
-  render() {
-    return (
-      <Home />
-    );
-  }
+function mapStateToProps(state) {
+  return {
+    speechToText: state.speechToText
+  };
 }
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(SpeechToTextActions, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

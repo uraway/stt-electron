@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ipcRenderer } from 'electron';
+import PropTypes from 'prop-types';
 
 const styles = {
   input: {
@@ -16,6 +16,10 @@ const styles = {
 
 export default class AudioFileUploader extends Component {
 
+  static propTypes = {
+    handleSpeechToText: PropTypes.object.isRequired,
+  }
+
   constructor() {
     super();
     this.state = {
@@ -27,11 +31,12 @@ export default class AudioFileUploader extends Component {
   }
 
   handleAudioFileUpload = (e) => {
+    const { handleSpeechToText } = this.props;
     const file = e.target.files[0];
     const path = file.path;
 
     if (file) {
-      ipcRenderer.send('speech-to-text', path);
+      handleSpeechToText(path);
       e.target.value = null;
     } else {
       console.error('Upload Failed');
