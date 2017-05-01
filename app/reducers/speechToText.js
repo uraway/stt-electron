@@ -4,6 +4,7 @@ import * as types from '../actions/speechToText';
 const initialState = {
   type: null,
   errors: {},
+  responses: {},
   isRequesting: false
 };
 
@@ -13,29 +14,33 @@ export type speechToTextStateType = {
 
 type actionType = {
   type: string,
-  errors?: Object
+  err?: Object,
+  res?: Object
 };
 
 export default function speechToText(state: Object = initialState, action: actionType) {
-  const { type, errors } = action;
+  const { type, res, err } = action;
 
   switch (type) {
     case types.SPEECH_TO_TEXT_REQUEST:
       return {
         type,
-        errors: {},
+        res: {},
+        err: {},
         isRequesting: true
       };
     case types.SPEECH_TO_TEXT_SUCCESS:
       return {
         type,
-        errors: {},
+        res,
+        err: {},
         isRequesting: false
       };
     case types.SPEECH_TO_TEXT_FAILURE:
       return {
         type,
-        errors,
+        err,
+        res: {},
         isRequesting: false
       };
     default:
