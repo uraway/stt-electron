@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { ipcRenderer } from 'electron';
 import RaisedButton from 'material-ui/RaisedButton';
-import { Card, CardActions } from 'material-ui/Card';
+import { Card, CardActions, CardTitle } from 'material-ui/Card';
 import TextField from 'material-ui/TextField';
 import FontIcon from 'material-ui/FontIcon';
+import { Tabs, Tab } from 'material-ui/Tabs';
 
 import * as types from '../actions/speechToText';
 import ModelSelectField from './ui/ModelSelectField';
+import TranscriptsView from './ui/TranscriptsView';
 
 const styles = {
   card: {
@@ -27,9 +29,6 @@ const styles = {
     width: '100%',
     opacity: 0,
   },
-  textField: {
-    width: '100%'
-  }
 };
 
 export default class Home extends Component {
@@ -103,9 +102,8 @@ export default class Home extends Component {
     const { modelName, keywords } = this.state;
 
     return (
-      <Card
-        style={styles.card}
-      >
+      <Card style={styles.card}>
+        <CardTitle title="Subscribe your Audio file" subtitle="Upload your audio file. (.wav)" />
         <CardActions>
           <ModelSelectField
             modelName={modelName}
@@ -119,9 +117,8 @@ export default class Home extends Component {
             value={keywords}
             hintText="IBM, Watson, ..."
             onChange={(value) => this.setState({ keywords: value })}
+            fullWidth
           />
-        </CardActions>
-        <CardActions>
           <RaisedButton
             label={speechToText.isRequesting ? 'Uploading...' : 'Upload Audio File'}
             labelPosition="before"
@@ -138,6 +135,19 @@ export default class Home extends Component {
               disabled={speechToText.isRequesting}
             />
           </RaisedButton>
+        </CardActions>
+        <CardActions>
+          <Tabs>
+            <Tab label="Transcripts">
+              <TranscriptsView />
+            </Tab>
+            <Tab label="Keywords">
+              Keywords
+            </Tab>
+            <Tab label="alternatives">
+              Alternatives
+            </Tab>
+          </Tabs>
         </CardActions>
       </Card>
     );
