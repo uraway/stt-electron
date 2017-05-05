@@ -4,6 +4,7 @@ import { ipcRenderer } from 'electron';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Card, CardActions } from 'material-ui/Card';
 import TextField from 'material-ui/TextField';
+import FontIcon from 'material-ui/FontIcon';
 
 import * as types from '../actions/speechToText';
 import ModelSelectField from './ui/ModelSelectField';
@@ -122,11 +123,13 @@ export default class Home extends Component {
         </CardActions>
         <CardActions>
           <RaisedButton
-            label={speechToText.isRequesting ? 'Uploading...' : 'Choose Audio File'}
+            label={speechToText.isRequesting ? 'Uploading...' : 'Upload Audio File'}
             labelPosition="before"
             containerElement="label"
             style={styles.button}
             disabled={speechToText.isRequesting}
+            primary
+            icon={<FontIcon className="fa fa-upload" />}
           >
             <input
               style={styles.input}
