@@ -73,9 +73,13 @@ export default class Home extends Component {
     const { sendSpeechToText } = this.props.speechToTextActions;
     const file = e.target.files[0];
     const path = file.path;
-
+    const { modelName } = this.state;
     if (file) {
-      sendSpeechToText(path);
+      const options = {
+        audio: path,
+        model: modelName
+      };
+      sendSpeechToText({ options });
       e.target.value = null;
     } else {
       this.setState({ errorText: 'Upload Failed' });

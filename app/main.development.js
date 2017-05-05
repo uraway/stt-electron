@@ -76,15 +76,15 @@ app.on('ready', async () => {
   menuBuilder.buildMenu();
 });
 
-ipcMain.on('speech-to-text-request', (event, path) => {
+ipcMain.on('speech-to-text-request', (event, options) => {
   const speechToText = new SpeechToTextV1({
     username: 'f19ce38c-7c76-4a31-a215-62f2873c77d6',
     password: 'pETNBPoPIofK'
   });
 
   const params = {
-    audio: fs.createReadStream(path),
-    model: 'ja-JP_BroadbandModel',
+    audio: fs.createReadStream(options.audio),
+    model: options.model,
     content_type: 'audio/wav',
   };
 
