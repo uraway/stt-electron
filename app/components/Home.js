@@ -9,6 +9,10 @@ import * as types from '../actions/speechToText';
 import ModelSelectField from './ui/ModelSelectField';
 
 const styles = {
+  card: {
+    padding: 50,
+    margin: 50
+  },
   button: {
     margin: 12,
   },
@@ -98,7 +102,9 @@ export default class Home extends Component {
     const { modelName, keywords } = this.state;
 
     return (
-      <Card>
+      <Card
+        style={styles.card}
+      >
         <CardActions>
           <ModelSelectField
             modelName={modelName}
