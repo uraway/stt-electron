@@ -12,12 +12,12 @@ const styles = {
 };
 
 const ModelSelectField = (props) => {
-  const { onChange, value } = props;
+  const { onChange, modelName } = props;
   return (
     <SelectField
       floatingLabelText="Voice Model"
-      value={value}
-      onChange={onChange}
+      value={modelName}
+      onChange={(e, index, value) => onChange(value)}
       style={styles.selectField}
     >
       {modelJson.map((model) => (
@@ -33,7 +33,7 @@ const ModelSelectField = (props) => {
 
 ModelSelectField.propTypes = {
   onChange: PropTypes.func.isRequired,
-  value: PropTypes.string.isRequired
+  modelName: PropTypes.string.isRequired
 };
 
 export default ModelSelectField;

@@ -96,7 +96,7 @@ export default class Home extends Component {
       <Card>
         <CardActions>
           <ModelSelectField
-            value={modelName}
+            modelName={modelName}
             onChange={(value) => this.setState({ modelName: value })}
           />
         </CardActions>
