@@ -45,7 +45,7 @@ export default class Home extends Component {
     super(props);
     this.state = {
       errorText: '',
-      transaction: '',
+      transcripts: '',
       modelName: 'ja-JP_BroadbandModel'
     };
 
@@ -70,8 +70,11 @@ export default class Home extends Component {
   componentWillReceiveProps(newProps) {
     const { speechToText } = newProps;
     if (speechToText.type === types.SPEECH_TO_TEXT_SUCCESS) {
+      const results = speechToText.res.results.map((result) => (
+          `Speaker ${result.speaker}: ${result.alternatives[0].transcript}\n\n`
+      )).join('');
       this.setState({
-        transaction: ''
+        transcripts: results
       });
     }
   }
@@ -97,9 +100,14 @@ export default class Home extends Component {
     return true;
   }
 
+  downloadTranscripts = () => {
+    const file = encodeURI(`data:text/plain;charset=utf-8,${this.state.transcripts}`);
+    ipcRenderer.send('download-file', file);
+  }
+
   render() {
     const { speechToText } = this.props;
-    const { modelName, keywords } = this.state;
+    const { modelName, keywords, transcripts } = this.state;
 
     return (
       <Card style={styles.card}>
@@ -135,12 +143,22 @@ export default class Home extends Component {
               disabled={speechToText.isRequesting}
             />
           </RaisedButton>
+          <RaisedButton
+            label={'Download transcripts'}
+            labelPosition="before"
+            containerElement="label"
+            style={styles.button}
+            disabled={speechToText.isRequesting}
+            secondary
+            icon={<FontIcon className="fa fa-download" />}
+            onTouchTap={this.downloadTranscripts}
+          />
         </CardActions>
         <CardActions>
           <Tabs>
             <Tab label="Transcripts">
               <TranscriptsView
-                speechToText={speechToText}
+                transcripts={transcripts}
               />
             </Tab>
             <Tab label="Keywords">
