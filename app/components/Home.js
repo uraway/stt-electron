@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { ipcRenderer } from 'electron';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
+import { Card } from 'material-ui/Card';
 
 import * as types from '../actions/speechToText';
 import ModelSelectField from './ui/ModelSelectField';
@@ -88,7 +89,7 @@ export default class Home extends Component {
     const { speechToText } = this.props;
     const { transaction, modelName } = this.state;
     return (
-      <div>
+      <Card>
         <RaisedButton
           label={speechToText.isRequesting ? 'Uploading...' : 'Choose Audio File'}
           labelPosition="before"
@@ -103,15 +104,17 @@ export default class Home extends Component {
             disabled={speechToText.isRequesting}
           />
         </RaisedButton>
+        <br />
         <ModelSelectField
           value={modelName}
           onChange={(value) => this.setState({ modelName: value })}
         />
+        <br />
         <TextField
           name="transaction"
           value={transaction}
         />
-      </div>
+      </Card>
     );
   }
 }
