@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { ipcRenderer } from 'electron';
 import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField';
-import { Card } from 'material-ui/Card';
+import { Card, CardActions } from 'material-ui/Card';
 
 import * as types from '../actions/speechToText';
 import ModelSelectField from './ui/ModelSelectField';
@@ -91,33 +90,32 @@ export default class Home extends Component {
 
   render() {
     const { speechToText } = this.props;
-    const { transaction, modelName } = this.state;
+    const { modelName } = this.state;
+    console.log(speechToText);
     return (
       <Card>
-        <RaisedButton
-          label={speechToText.isRequesting ? 'Uploading...' : 'Choose Audio File'}
-          labelPosition="before"
-          containerElement="label"
-          style={styles.button}
-          disabled={speechToText.isRequesting}
-        >
-          <input
-            style={styles.input}
-            onChange={this.handleAudioFileUpload}
-            type="file"
-            disabled={speechToText.isRequesting}
+        <CardActions>
+          <ModelSelectField
+            value={modelName}
+            onChange={(value) => this.setState({ modelName: value })}
           />
-        </RaisedButton>
-        <br />
-        <ModelSelectField
-          value={modelName}
-          onChange={(value) => this.setState({ modelName: value })}
-        />
-        <br />
-        <TextField
-          name="transaction"
-          value={transaction}
-        />
+        </CardActions>
+        <CardActions>
+          <RaisedButton
+            label={speechToText.isRequesting ? 'Uploading...' : 'Choose Audio File'}
+            labelPosition="before"
+            containerElement="label"
+            style={styles.button}
+            disabled={speechToText.isRequesting}
+          >
+            <input
+              style={styles.input}
+              onChange={this.handleAudioFileUpload}
+              type="file"
+              disabled={speechToText.isRequesting}
+            />
+          </RaisedButton>
+        </CardActions>
       </Card>
     );
   }
