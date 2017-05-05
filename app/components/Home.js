@@ -5,6 +5,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 
 import * as types from '../actions/speechToText';
+import ModelSelectField from './ui/ModelSelectField';
 
 const styles = {
   button: {
@@ -36,7 +37,8 @@ export default class Home extends Component {
     super(props);
     this.state = {
       errorText: '',
-      transaction: ''
+      transaction: '',
+      modelName: 'ja-JP_BroadbandModel'
     };
 
     const { dispatch } = props;
@@ -84,7 +86,7 @@ export default class Home extends Component {
 
   render() {
     const { speechToText } = this.props;
-    const { transaction } = this.state;
+    const { transaction, modelName } = this.state;
     return (
       <div>
         <RaisedButton
@@ -101,6 +103,10 @@ export default class Home extends Component {
             disabled={speechToText.isRequesting}
           />
         </RaisedButton>
+        <ModelSelectField
+          value={modelName}
+          onChange={(value) => this.setState({ modelName: value })}
+        />
         <TextField
           name="transaction"
           value={transaction}
