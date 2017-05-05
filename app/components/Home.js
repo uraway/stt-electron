@@ -139,7 +139,9 @@ export default class Home extends Component {
         <CardActions>
           <Tabs>
             <Tab label="Transcripts">
-              <TranscriptsView />
+              <TranscriptsView
+                speechToText={speechToText}
+              />
             </Tab>
             <Tab label="Keywords">
               Keywords
