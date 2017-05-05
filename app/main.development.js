@@ -72,6 +72,13 @@ app.on('ready', async () => {
     mainWindow = null;
   });
 
+  mainWindow.webContents.on('devtools-opened', () => {
+    setImmediate(() => {
+      mainWindow.show();
+      mainWindow.focus();
+    });
+  });
+
   const menuBuilder = new MenuBuilder(mainWindow);
   menuBuilder.buildMenu();
 });
