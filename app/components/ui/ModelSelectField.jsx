@@ -5,6 +5,12 @@ import MenuItem from 'material-ui/MenuItem';
 
 import modelJson from '../../utils/model.json';
 
+const styles = {
+  selectField: {
+    width: '50%'
+  }
+};
+
 const ModelSelectField = (props) => {
   const { onChange, value } = props;
   return (
@@ -12,6 +18,7 @@ const ModelSelectField = (props) => {
       floatingLabelText="Voice Model"
       value={value}
       onChange={onChange}
+      style={styles.selectField}
     >
       {modelJson.map((model) => (
         <MenuItem
