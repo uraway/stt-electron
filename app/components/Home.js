@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { ipcRenderer } from 'electron';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Card, CardActions } from 'material-ui/Card';
+import TextField from 'material-ui/TextField';
 
 import * as types from '../actions/speechToText';
 import ModelSelectField from './ui/ModelSelectField';
@@ -21,6 +22,9 @@ const styles = {
     width: '100%',
     opacity: 0,
   },
+  textField: {
+    width: '100%'
+  }
 };
 
 export default class Home extends Component {
@@ -72,11 +76,12 @@ export default class Home extends Component {
     const { sendSpeechToText } = this.props.speechToTextActions;
     const file = e.target.files[0];
     const path = file.path;
-    const { modelName } = this.state;
+    const { modelName, keywords } = this.state;
     if (file) {
       const options = {
         audio: path,
-        model: modelName
+        model: modelName,
+        keywords
       };
       sendSpeechToText({ options });
       e.target.value = null;
@@ -90,14 +95,23 @@ export default class Home extends Component {
 
   render() {
     const { speechToText } = this.props;
-    const { modelName } = this.state;
-    console.log(speechToText);
+    const { modelName, keywords } = this.state;
+
     return (
       <Card>
         <CardActions>
           <ModelSelectField
             modelName={modelName}
             onChange={(value) => this.setState({ modelName: value })}
+          />
+          <br />
+          <TextField
+            style={styles.textField}
+            floatingLabelText="Keywords"
+            name="keywords"
+            value={keywords}
+            hintText="IBM, Watson, ..."
+            onChange={(value) => this.setState({ keywords: value })}
           />
         </CardActions>
         <CardActions>

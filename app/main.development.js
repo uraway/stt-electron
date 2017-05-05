@@ -93,6 +93,7 @@ ipcMain.on('speech-to-text-request', (event, options) => {
     audio: fs.createReadStream(options.audio),
     model: options.model,
     content_type: 'audio/wav',
+    keywords: options.keywords
   };
 
   speechToText.recognize(params, (err, res) => {

@@ -7,7 +7,7 @@ import modelJson from '../../utils/model.json';
 
 const styles = {
   selectField: {
-    width: '50%'
+    width: '100%'
   }
 };
 
