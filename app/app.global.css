@@ -1,29 +1,27 @@
 @import "~font-awesome/css/font-awesome.css";
 
-h2 {
-  margin: 0;
-  font-size: 2.25rem;
-  font-weight: bold;
-  letter-spacing: -0.025em;
-  color: #fff;
-}
-
-p {
-  font-size: 24px;
-}
-
-li {
-  list-style: none;
-}
+/* custom font icons */
+@import "font-icons/style.css";
 
 a {
-  color: white;
-  opacity: 0.75;
+  color: #ff4081;
   text-decoration: none;
 }
 
 a:hover {
-  opacity: 1;
-  text-decoration: none;
-  cursor: pointer;
+  text-decoration: underline;
+}
+
+html {
+  font-family: 'Roboto', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+body, h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+}
+
+body {
+  font-size: 15px;
+  line-height: 24px;
 }

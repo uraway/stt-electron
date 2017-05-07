@@ -5,6 +5,8 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import AppCanvas from 'material-ui/internal/AppCanvas';
 import { purple900 } from 'material-ui/styles/colors';
 
+import Footer from './Footer';
+
 const muiTheme = getMuiTheme({
   tabs: {
     backgroundColor: purple900,
@@ -18,6 +20,12 @@ const muiTheme = getMuiTheme({
     focusColor: purple900
   }
 });
+
+const styles = {
+  content: {
+    margin: 50
+  },
+};
 
 export default class App extends Component {
   static propTypes = {
@@ -37,7 +45,10 @@ export default class App extends Component {
   render() {
     return (
       <AppCanvas>
-        {this.props.children}
+        <div style={styles.content}>
+          {this.props.children}
+        </div>
+        <Footer />
       </AppCanvas>
     );
   }
