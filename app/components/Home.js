@@ -26,7 +26,7 @@ const styles = {
   },
   textField: {
     width: '50%'
-  }
+  },
 };
 
 export default class Home extends Component {
@@ -44,7 +44,8 @@ export default class Home extends Component {
     this.state = {
       errorText: '',
       transcripts: '',
-      modelName: 'ja-JP_BroadbandModel'
+      modelName: 'ja-JP_BroadbandModel',
+      keywords: ''
     };
 
     const { dispatch } = props;
@@ -86,7 +87,7 @@ export default class Home extends Component {
       const options = {
         audio: path,
         model: modelName,
-        keywords
+        keywords: keywords.split(',')
       };
       sendSpeechToText({ options });
       e.target.value = null;
@@ -120,7 +121,7 @@ export default class Home extends Component {
           name="keywords"
           value={keywords}
           hintText="IBM, Watson, Audio, ..."
-          onChange={(value) => this.setState({ keywords: value })}
+          onChange={(_e, value) => this.setState({ keywords: value })}
         />
         <br />
         <RaisedButton
@@ -129,7 +130,6 @@ export default class Home extends Component {
           containerElement="label"
           style={styles.button}
           disabled={speechToText.isRequesting}
-          primary
           icon={<FontIcon className="fa fa-upload" />}
         >
           <input
@@ -145,11 +145,10 @@ export default class Home extends Component {
           containerElement="label"
           style={styles.button}
           disabled={speechToText.isRequesting}
-          secondary
           icon={<FontIcon className="fa fa-download" />}
           onTouchTap={this.downloadTranscripts}
         />
-        <Tabs>
+        <Tabs style={styles.tabs}>
           <Tab label="Transcripts">
             <TranscriptsView
               transcripts={transcripts}
