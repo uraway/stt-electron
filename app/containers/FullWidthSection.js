@@ -1,27 +1,20 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ClearFix from 'material-ui/internal/ClearFix';
-import spacing from 'material-ui/styles/spacing';
-import withWidth, { SMALL, LARGE } from 'material-ui/utils/withWidth';
-
-const desktopGutter = spacing.desktopGutter;
+import withWidth from 'material-ui/utils/withWidth';
 
 const styles = {
   root: {
-    padding: '23px',
+    position: 'fixed',
+    bottom: 0,
+    width: '100%',
+    height: '100px',
+    padding: '15px',
     boxSizing: 'border-box',
   },
   content: {
     maxWidth: 1200,
     margin: '0 auto',
-  },
-  rootWhenSmall: {
-    paddingTop: desktopGutter * 2,
-    paddingBottom: desktopGutter * 2,
-  },
-  rootWhenLarge: {
-    paddingTop: desktopGutter * 3,
-    paddingBottom: desktopGutter * 3,
   },
 };
 
@@ -30,7 +23,6 @@ class FullWidthSection extends Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
     style: PropTypes.object,
-    width: PropTypes.number.isRequired,
   };
 
   static defaultProps = {
@@ -41,7 +33,6 @@ class FullWidthSection extends Component {
   render() {
     const {
       style,
-      width,
     } = this.props;
 
     return (
@@ -49,8 +40,7 @@ class FullWidthSection extends Component {
         style={Object.assign(
           styles.root,
           style,
-          width === SMALL && styles.rootWhenSmall,
-          width === LARGE && styles.rootWhenLarge)}
+        )}
       >
         {this.props.children}
       </ClearFix>
