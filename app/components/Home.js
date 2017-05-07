@@ -111,7 +111,7 @@ export default class Home extends Component {
 
     return (
       <Card style={styles.card}>
-        <CardTitle title="Subscribe your Audio file" subtitle="Upload your audio file. (.wav)" />
+        <CardTitle title="Transcribe Audio" subtitle="Upload your audio file. (.wav)" />
         <CardActions>
           <ModelSelectField
             modelName={modelName}
@@ -120,10 +120,10 @@ export default class Home extends Component {
           <br />
           <TextField
             style={styles.textField}
-            floatingLabelText="Keywords"
+            floatingLabelText="Keywords to spot (Optional)"
             name="keywords"
             value={keywords}
-            hintText="IBM, Watson, ..."
+            hintText="IBM, Watson, Audio, ..."
             onChange={(value) => this.setState({ keywords: value })}
             fullWidth
           />
