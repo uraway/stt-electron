@@ -148,7 +148,14 @@ export default merge.smart(baseConfig, {
       {
         test: /\.(?:ico|gif|png|jpg|jpeg|webp)$/,
         use: 'url-loader',
-      }
+      },
+      {
+        test: /\.js$/,
+        use: [
+          require.resolve('./remove-hashtag-loader')
+        ],
+        include: /node_modules\/JSONStream\/index.js/,
+      },
     ]
   },
 
