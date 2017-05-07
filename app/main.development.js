@@ -1,10 +1,9 @@
 /* eslint global-require: 0, flowtype-errors/show-errors: 0 */
 // @flow
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain, shell } from 'electron';
 import { download } from 'electron-dl';
 import fs from 'fs';
 import SpeechToTextV1 from 'watson-developer-cloud/speech-to-text/v1';
-
 
 import MenuBuilder from './menu';
 
@@ -109,4 +108,8 @@ ipcMain.on('speech-to-text-request', (event, options) => {
 
 ipcMain.on('download-file', (event, file) => {
   download(BrowserWindow.getFocusedWindow(), file, { saveAs: true });
+});
+
+ipcMain.on('click-github', () => {
+  shell.openExternal('https://github.com/uraway');
 });

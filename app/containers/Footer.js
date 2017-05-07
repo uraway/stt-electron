@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import IconButton from 'material-ui/IconButton';
 import { grey900, lightWhite, darkWhite } from 'material-ui/styles/colors';
+import { ipcRenderer } from 'electron';
 
 import FullWidthSection from './FullWidthSection';
 
@@ -33,7 +34,7 @@ class Footer extends Component {
         <IconButton
           iconStyle={styles.iconButton}
           iconClassName="muidocs-icon-custom-github"
-          href="https://github.com/uraway"
+          onTouchTap={() => ipcRenderer.send('click-github')}
         />
       </FullWidthSection>
     );
