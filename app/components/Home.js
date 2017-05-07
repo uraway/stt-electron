@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { ipcRenderer } from 'electron';
 import RaisedButton from 'material-ui/RaisedButton';
-import { Card, CardActions, CardTitle } from 'material-ui/Card';
 import TextField from 'material-ui/TextField';
 import FontIcon from 'material-ui/FontIcon';
 import { Tabs, Tab } from 'material-ui/Tabs';
@@ -12,10 +11,6 @@ import ModelSelectField from './ui/ModelSelectField';
 import TranscriptsView from './ui/TranscriptsView';
 
 const styles = {
-  card: {
-    padding: 50,
-    margin: 50
-  },
   button: {
     margin: 12,
   },
@@ -110,66 +105,61 @@ export default class Home extends Component {
     const { modelName, keywords, transcripts } = this.state;
 
     return (
-      <Card style={styles.card}>
-        <CardTitle title="Transcribe Audio" subtitle="Upload your audio file. (.wav)" />
-        <CardActions>
-          <ModelSelectField
-            modelName={modelName}
-            onChange={(value) => this.setState({ modelName: value })}
-          />
-          <br />
-          <TextField
-            style={styles.textField}
-            floatingLabelText="Keywords to spot (Optional)"
-            name="keywords"
-            value={keywords}
-            hintText="IBM, Watson, Audio, ..."
-            onChange={(value) => this.setState({ keywords: value })}
-            fullWidth
-          />
-          <RaisedButton
-            label={speechToText.isRequesting ? 'Uploading...' : 'Upload Audio File'}
-            labelPosition="before"
-            containerElement="label"
-            style={styles.button}
+      <div>
+        <ModelSelectField
+          modelName={modelName}
+          onChange={(value) => this.setState({ modelName: value })}
+        />
+        <br />
+        <TextField
+          style={styles.textField}
+          floatingLabelText="Keywords to spot (Optional)"
+          name="keywords"
+          value={keywords}
+          hintText="IBM, Watson, Audio, ..."
+          onChange={(value) => this.setState({ keywords: value })}
+        />
+        <br />
+        <RaisedButton
+          label={speechToText.isRequesting ? 'Uploading...' : 'Upload Audio File'}
+          labelPosition="before"
+          containerElement="label"
+          style={styles.button}
+          disabled={speechToText.isRequesting}
+          primary
+          icon={<FontIcon className="fa fa-upload" />}
+        >
+          <input
+            style={styles.input}
+            onChange={this.handleAudioFileUpload}
+            type="file"
             disabled={speechToText.isRequesting}
-            primary
-            icon={<FontIcon className="fa fa-upload" />}
-          >
-            <input
-              style={styles.input}
-              onChange={this.handleAudioFileUpload}
-              type="file"
-              disabled={speechToText.isRequesting}
+          />
+        </RaisedButton>
+        <RaisedButton
+          label={'Download transcripts'}
+          labelPosition="before"
+          containerElement="label"
+          style={styles.button}
+          disabled={speechToText.isRequesting}
+          secondary
+          icon={<FontIcon className="fa fa-download" />}
+          onTouchTap={this.downloadTranscripts}
+        />
+        <Tabs>
+          <Tab label="Transcripts">
+            <TranscriptsView
+              transcripts={transcripts}
             />
-          </RaisedButton>
-          <RaisedButton
-            label={'Download transcripts'}
-            labelPosition="before"
-            containerElement="label"
-            style={styles.button}
-            disabled={speechToText.isRequesting}
-            secondary
-            icon={<FontIcon className="fa fa-download" />}
-            onTouchTap={this.downloadTranscripts}
-          />
-        </CardActions>
-        <CardActions>
-          <Tabs>
-            <Tab label="Transcripts">
-              <TranscriptsView
-                transcripts={transcripts}
-              />
-            </Tab>
-            <Tab label="Keywords">
+          </Tab>
+          <Tab label="Keywords">
               Keywords
             </Tab>
-            <Tab label="alternatives">
+          <Tab label="alternatives">
               Alternatives
             </Tab>
-          </Tabs>
-        </CardActions>
-      </Card>
+        </Tabs>
+      </div>
     );
   }
 }
