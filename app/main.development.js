@@ -72,28 +72,35 @@ app.on('ready', async () => {
     mainWindow = null;
   });
 
+  mainWindow.webContents.on('devtools-opened', () => {
+    setImmediate(() => {
+      mainWindow.show();
+      mainWindow.focus();
+    });
+  });
+
   const menuBuilder = new MenuBuilder(mainWindow);
   menuBuilder.buildMenu();
 });
 
-ipcMain.on('speech-to-text-request', (event, path) => {
+ipcMain.on('speech-to-text-request', (event, options) => {
   const speechToText = new SpeechToTextV1({
     username: 'f19ce38c-7c76-4a31-a215-62f2873c77d6',
     password: 'pETNBPoPIofK'
   });
 
   const params = {
-    audio: fs.createReadStream(path),
-    model: 'ja-JP_BroadbandModel',
+    audio: fs.createReadStream(options.audio),
+    model: options.model,
     content_type: 'audio/wav',
+    keywords: options.keywords,
+    speaker_labels: true
   };
 
   speechToText.recognize(params, (err, res) => {
     if (err) {
-      console.log('error');
       event.sender.send('speech-to-text-failure', err);
     } else {
-      console.log('finished');
       event.sender.send('speech-to-text-success', res);
       // const file = encodeURI(`data:text/plain;charset=utf-8,${JSON.stringify(res, null, 2)}`);
     }
