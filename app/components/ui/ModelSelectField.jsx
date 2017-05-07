@@ -24,7 +24,7 @@ const ModelSelectField = (props) => {
         <MenuItem
           value={model.name}
           key={model.name}
-          primaryText={`${model.description.replace(/\.$/, '')} (${model.rate}HKz)`}
+          primaryText={`${model.description.replace(/\.$/, '')} (${model.rate / 1000}HKz)`}
         />
       ))}
     </SelectField>
