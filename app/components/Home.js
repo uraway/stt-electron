@@ -24,6 +24,9 @@ const styles = {
     width: '100%',
     opacity: 0,
   },
+  textField: {
+    width: '50%'
+  }
 };
 
 export default class Home extends Component {
