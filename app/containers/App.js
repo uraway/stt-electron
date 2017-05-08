@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
+import { ipcRenderer } from 'electron';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import AppCanvas from 'material-ui/internal/AppCanvas';
+import AppBar from 'material-ui/AppBar';
+import IconButton from 'material-ui/IconButton';
 import { purple900, darkWhite, lightWhite } from 'material-ui/styles/colors';
 import withWidth, { MEDIUM, LARGE } from 'material-ui/utils/withWidth';
 import spacing from 'material-ui/styles/spacing';
-
-import AppNavDrawer from './AppNavDrawer';
 
 const muiTheme = getMuiTheme({
   tabs: {
@@ -26,6 +27,10 @@ class App extends Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
     width: PropTypes.number.isRequired,
+  };
+
+  static contextTypes = {
+    router: PropTypes.object.isRequired,
   };
 
   static childContextTypes = {
@@ -57,9 +62,10 @@ class App extends Component {
     const styles = {
       appBar: {
         position: 'fixed',
-      // Needed to overlap the examples
+        // Needed to overlap the examples
         zIndex: this.state.muiTheme.zIndex.appBar + 1,
         top: 0,
+        backgroundColor: purple900
       },
       root: {
         paddingTop: spacing.desktopKeylineIncrement,
@@ -96,35 +102,47 @@ class App extends Component {
     });
   };
 
+  handleTouchTapLeftIconButton = () => {
+    this.setState({
+      navDrawerOpen: !this.state.navDrawerOpen,
+    });
+  };
+
+  handleChangeRequestNavDrawer = (open) => {
+    this.setState({
+      navDrawerOpen: open,
+    });
+  };
+
   render() {
-    let {
-      navDrawerOpen,
-    } = this.state;
     const styles = this.getStyles();
+    const showMenuIconButton = true;
+    const title = 'Speech To Text';
 
-    let docked = false;
-
-    if (this.props.width === LARGE) {
-      docked = true;
-      navDrawerOpen = true;
-
+    if (this.props.width === LARGE && title !== '') {
       styles.navDrawer = {
         zIndex: styles.appBar.zIndex - 1,
       };
-      styles.root.paddingLeft = 256;
     }
 
     return (
       <AppCanvas>
+        <AppBar
+          iconElementLeft={
+            <IconButton
+              iconClassName="muidocs-icon-custom-github"
+              onTouchTap={() => ipcRenderer.send('click-github')}
+            />
+          }
+          title={title}
+          zDepth={0}
+          style={styles.appBar}
+          showMenuIconButton={showMenuIconButton}
+        />
         <div style={styles.root}>
           <div style={styles.content}>
             {this.props.children}
           </div>
-          <AppNavDrawer
-            docked={docked}
-            onChangeList={this.handleChangeList}
-            open={navDrawerOpen}
-          />
         </div>
       </AppCanvas>
     );
