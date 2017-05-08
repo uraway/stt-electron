@@ -117,7 +117,7 @@ class App extends Component {
   render() {
     const styles = this.getStyles();
     const showMenuIconButton = true;
-    const title = 'Speech To Text';
+    const title = 'Transcribe Audio';
 
     if (this.props.width === LARGE && title !== '') {
       styles.navDrawer = {

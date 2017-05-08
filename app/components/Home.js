@@ -110,6 +110,11 @@ export default class Home extends Component {
 
     return (
       <div>
+        <h1>Transcribe your audio file</h1>
+        <ul>
+          <li>Up to 100MB</li>
+          <li>.wav only</li>
+        </ul>
         <ModelSelectField
           modelName={modelName}
           onChange={(value) => this.setState({ modelName: value })}
