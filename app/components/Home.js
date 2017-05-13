@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { ipcRenderer } from 'electron';
 import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField';
 import FontIcon from 'material-ui/FontIcon';
 
 import * as types from '../actions/speechToText';
 import ModelSelectField from './ui/ModelSelectField';
 import TranscriptsView from './ui/TranscriptsView';
+import ErrorMessage from './ui/ErrorMessage';
 
 const styles = {
   button: {
@@ -44,7 +44,6 @@ export default class Home extends Component {
       errorText: '',
       transcripts: '',
       modelName: 'ja-JP_BroadbandModel',
-      keywords: ''
     };
 
     const { dispatch } = props;
@@ -81,12 +80,11 @@ export default class Home extends Component {
     const { sendSpeechToText } = this.props.speechToTextActions;
     const file = e.target.files[0];
     const path = file.path;
-    const { modelName, keywords } = this.state;
+    const { modelName } = this.state;
     if (file) {
       const options = {
         audio: path,
         model: modelName,
-        keywords: keywords.split(',')
       };
       sendSpeechToText({ options });
       e.target.value = null;
@@ -105,8 +103,8 @@ export default class Home extends Component {
 
   render() {
     const { speechToText } = this.props;
-    const { modelName, keywords, transcripts } = this.state;
-
+    const { modelName, transcripts } = this.state;
+    console.log(speechToText);
     return (
       <div>
         <h1>Transcribe your audio file</h1>
@@ -119,14 +117,6 @@ export default class Home extends Component {
           onChange={(value) => this.setState({ modelName: value })}
         />
         <br />
-        <TextField
-          style={styles.textField}
-          floatingLabelText="Keywords to spot (Optional)"
-          name="keywords"
-          value={keywords}
-          hintText="IBM, Watson, Audio, ..."
-          onChange={(_e, value) => this.setState({ keywords: value })}
-        />
         <br />
         <RaisedButton
           label={speechToText.isRequesting ? 'Uploading...' : 'Upload Audio File'}
@@ -151,6 +141,9 @@ export default class Home extends Component {
           disabled={speechToText.isRequesting}
           icon={<FontIcon className="fa fa-download" />}
           onTouchTap={this.downloadTranscripts}
+        />
+        <ErrorMessage
+          errors={speechToText.err}
         />
         <TranscriptsView
           transcripts={transcripts}
