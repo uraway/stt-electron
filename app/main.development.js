@@ -84,8 +84,8 @@ app.on('ready', async () => {
 
 ipcMain.on('speech-to-text-request', (event, options) => {
   const speechToText = new SpeechToTextV1({
-    username: 'f19ce38c-7c76-4a31-a215-62f2873c77d6',
-    password: 'pETNBPoPIofK'
+    username: process.env.USERNAME,
+    password: process.env.PASSWORD
   });
 
   const params = {
