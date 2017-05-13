@@ -4,7 +4,6 @@ import { ipcRenderer } from 'electron';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import FontIcon from 'material-ui/FontIcon';
-import { Tabs, Tab } from 'material-ui/Tabs';
 
 import * as types from '../actions/speechToText';
 import ModelSelectField from './ui/ModelSelectField';
@@ -153,19 +152,9 @@ export default class Home extends Component {
           icon={<FontIcon className="fa fa-download" />}
           onTouchTap={this.downloadTranscripts}
         />
-        <Tabs style={styles.tabs}>
-          <Tab label="Transcripts">
-            <TranscriptsView
-              transcripts={transcripts}
-            />
-          </Tab>
-          <Tab label="Keywords">
-              Keywords
-            </Tab>
-          <Tab label="alternatives">
-              Alternatives
-            </Tab>
-        </Tabs>
+        <TranscriptsView
+          transcripts={transcripts}
+        />
       </div>
     );
   }
