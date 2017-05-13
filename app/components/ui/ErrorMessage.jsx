@@ -20,7 +20,9 @@ const ErrorMessage = (props) => {
   };
 
   return (
-    getErrorMessage()
+    <div>
+      {getErrorMessage()}
+    </div>
   );
 };
 
