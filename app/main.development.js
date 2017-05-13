@@ -1,10 +1,9 @@
 /* eslint global-require: 0, flowtype-errors/show-errors: 0 */
 // @flow
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain, shell } from 'electron';
 import { download } from 'electron-dl';
 import fs from 'fs';
 import SpeechToTextV1 from 'watson-developer-cloud/speech-to-text/v1';
-
 
 import MenuBuilder from './menu';
 
@@ -85,28 +84,38 @@ app.on('ready', async () => {
 
 ipcMain.on('speech-to-text-request', (event, options) => {
   const speechToText = new SpeechToTextV1({
-    username: 'f19ce38c-7c76-4a31-a215-62f2873c77d6',
-    password: 'pETNBPoPIofK'
+    username: process.env.USERNAME,
+    password: process.env.PASSWORD
   });
 
   const params = {
-    audio: fs.createReadStream(options.audio),
     model: options.model,
     content_type: 'audio/wav',
-    keywords: options.keywords,
     speaker_labels: true
   };
 
-  speechToText.recognize(params, (err, res) => {
-    if (err) {
-      event.sender.send('speech-to-text-failure', err);
-    } else {
-      event.sender.send('speech-to-text-success', res);
-      // const file = encodeURI(`data:text/plain;charset=utf-8,${JSON.stringify(res, null, 2)}`);
-    }
-  });
+  // Create the stream.
+  const recognizeStream = speechToText.createRecognizeStream(params);
+
+  // Pipe in the audio.
+  fs.createReadStream(options.audio).pipe(recognizeStream);
+
+  recognizeStream.setEncoding('utf8')
+    .on('results', (e) => {
+      event.sender.send('speech-to-text-success', e);
+    })
+    .on('error', (e) => {
+      event.sender.send('speech-to-text-failure', e);
+    })
+    .on('end', (e) => {
+      console.log(e);
+    });
 });
 
 ipcMain.on('download-file', (event, file) => {
   download(BrowserWindow.getFocusedWindow(), file, { saveAs: true });
+});
+
+ipcMain.on('click-github', () => {
+  shell.openExternal('https://github.com/uraway');
 });

@@ -5,10 +5,10 @@ const TranscriptsView = (props) => {
   const { transcripts } = props;
   const styles = {
     textarea: {
+      width: '98%',
       border: 'none',
-      width: '99%',
       height: '200px',
-      margin: '10px'
+      margin: '10px',
     }
   };
   return (

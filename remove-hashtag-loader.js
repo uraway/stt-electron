@@ -1,3 +1,1 @@
-module.exports = function (source) {
-  return source.replace(/^#! .*\n/, '');
-};
+module.exports = (source) => source.replace(/^#! .*\n/, '');
