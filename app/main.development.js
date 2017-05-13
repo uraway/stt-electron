@@ -89,21 +89,27 @@ ipcMain.on('speech-to-text-request', (event, options) => {
   });
 
   const params = {
-    audio: fs.createReadStream(options.audio),
     model: options.model,
     content_type: 'audio/wav',
-    keywords: options.keywords,
     speaker_labels: true
   };
 
-  speechToText.recognize(params, (err, res) => {
-    if (err) {
-      event.sender.send('speech-to-text-failure', err);
-    } else {
-      event.sender.send('speech-to-text-success', res);
-      // const file = encodeURI(`data:text/plain;charset=utf-8,${JSON.stringify(res, null, 2)}`);
-    }
-  });
+  // Create the stream.
+  const recognizeStream = speechToText.createRecognizeStream(params);
+
+  // Pipe in the audio.
+  fs.createReadStream(options.audio).pipe(recognizeStream);
+
+  recognizeStream.setEncoding('utf8')
+    .on('results', (e) => {
+      event.sender.send('speech-to-text-success', e);
+    })
+    .on('error', (e) => {
+      event.sender.send('speech-to-text-failure', e);
+    })
+    .on('end', (e) => {
+      console.log(e);
+    });
 });
 
 ipcMain.on('download-file', (event, file) => {
