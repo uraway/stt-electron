@@ -3,8 +3,8 @@ import * as types from '../actions/speechToText';
 
 const initialState = {
   type: null,
-  errors: {},
-  responses: {},
+  err: {},
+  res: {},
   isRequesting: false
 };
 
