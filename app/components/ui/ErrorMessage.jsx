@@ -10,14 +10,18 @@ const styles = {
 
 const ErrorMessage = (props) => {
   const { errors } = props;
-  if (errors && errors.raw) {
+  const getErrorMessage = () => {
+    if (errors === null) return '';
     return (
       <p style={styles.errors}>
         {errors.raw.data}
       </p>
     );
-  }
-  return <div />;
+  };
+
+  return (
+    getErrorMessage()
+  );
 };
 
 ErrorMessage.propTypes = {
