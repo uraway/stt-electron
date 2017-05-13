@@ -3,8 +3,8 @@ import * as types from '../actions/speechToText';
 
 const initialState = {
   type: null,
-  err: {},
-  res: {},
+  err: null,
+  res: null,
   isRequesting: false
 };
 
@@ -25,22 +25,22 @@ export default function speechToText(state: Object = initialState, action: actio
     case types.SPEECH_TO_TEXT_REQUEST:
       return {
         type,
-        res: {},
-        err: {},
+        res: null,
+        err: null,
         isRequesting: true
       };
     case types.SPEECH_TO_TEXT_SUCCESS:
       return {
         type,
         res,
-        err: {},
+        err: null,
         isRequesting: false
       };
     case types.SPEECH_TO_TEXT_FAILURE:
       return {
         type,
         err,
-        res: {},
+        res: null,
         isRequesting: false
       };
     default:
